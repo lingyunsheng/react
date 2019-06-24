@@ -9,7 +9,7 @@ var a=1
 
 ## action
 js {}
-干什么 type:'increment'
+干什么 type:'increment' 
 传递数据
 
 ## Reducer
