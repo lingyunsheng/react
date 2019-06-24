@@ -11,3 +11,8 @@ high order component
 
 ## @
 ES7 里面的装饰器  decorator
+
+cnpm i @babel/plugin-proposal-decorators -D
+"plugins": [
+    ["@babel/plugin-proposal-decorators", { "legacy" : true }]
+  ]
