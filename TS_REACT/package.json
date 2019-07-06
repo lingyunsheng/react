@@ -1,5 +1,5 @@
 {
-  "name": "ts_react",
+  "name": "TS_REACT",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -40,5 +40,6 @@
     "redux-thunk": "^2.3.0",
     "toastr": "^2.1.4",
     "typescript": "^3.0.1"
-  }
+  },
+  "description": ""
 }

@@ -22,3 +22,7 @@ es6基础
 create-react-app 脚手架
 第三方库 redux react-router
 定制化配置
+
+yarn start 启动
+
+ yarn add redux
