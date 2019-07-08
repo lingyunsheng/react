@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 class Ranking extends Component {
   state = {  }
   render() { 
-    return (
+    return ( 
       <div>
-        Ranking
+        ranking
       </div>
      );
   }
