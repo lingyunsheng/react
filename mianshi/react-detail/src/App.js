@@ -1,4 +1,6 @@
 import React from 'react';
+import {Button, List} from 'antd-mobile';
+import '../node_modules/antd-mobile/dist/antd-mobile.css';
 
 // 父组件
 class App extends React.Component {
@@ -55,14 +57,14 @@ class Yiying extends React.Component {
       <div>
         <h2>二级演员, 演员{this.props.name}</h2>
         {/* 箭头函数的形式 */}
-        <button onClick={this.addActor}>演员爱豆</button>
+        <Button type="primary" onClick={this.addActor}>演员爱豆</Button>
         {/* 渲染state列表 */}
-        <ul>
+        <List renderHeader={()=>'演员列表'}>
           {/* 列表循环时 需要设置key */}
           {this.state.actors.map(v => {
-            return <li key={v}>{v}</li>
+            return <List.Item key={v}>{v}</List.Item>
           })}
-        </ul>
+        </List>
 
       </div>
     )
