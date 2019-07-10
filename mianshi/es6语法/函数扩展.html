@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function hello(name) {
+            console.log(`hello ${name}`)
+        }    
+        const hello1 = (name) =>{
+            console.log(`hello ${name}`)
+        }
+        hello('ym')
+        hello1('ym')
+
+        setTimeout(()=> {
+            console.log('xxxx')
+        },3000)
+        const obj = {a:'1',b:'2'}
+        const obj2={c:'3',d:'4'}
+        console.log({...obj, ...obj2})
+    </script>
+</body>
+</html>
