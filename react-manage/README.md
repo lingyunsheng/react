@@ -378,8 +378,10 @@ import {addGun,removeGun,addGunAsync,removeGunAsync} from './index.redux.js';
 
 const mapStatetoProps=(state)=>{
     const num ={state}
-    return 
 }
 const actionsCreators ={addGun,removeGun,addGunAsync,removeGunAsync}
 
-App = connet(mapStatetoProps,actionsCreators)App
+App = connet(mapStatetoProps,actionsCreators)(App)
+
+### 装饰器 优化代码
+
