@@ -1,73 +1,41 @@
 import React from 'react';
-import {Button, List} from 'antd-mobile';
+import {connect} from 'react-redux';
+// 连接
+import {addGun,removeGun,addGunAsync,removeGunAsync} from './index.redux';
+import {Button} from 'antd-mobile';
 import '../node_modules/antd-mobile/dist/antd-mobile.css';
 
 // 父组件
 class App extends React.Component {
+  // constructor(props) {
+  //   super(props);
+  // }
   render() {
-    const boss = '杨幂'
+    // 通过属性传递进来
+    // const store = this.props.store
+    // const num = store.getState()
+    // const num = this.props.num
+    // const addGun = this.props.addGun
+    // const removeGun = this.props.removeGun
+    // const addGunAsync = this.props.addGunAsync
+    // const removeGunAsync = this.props.removeGunAsync
     return (
       <div>
-        <h2>独立团, 演员{boss}</h2>
-        <Yiying name="zly"></Yiying>
-        <Erying name="lyf"></Erying>
+        <h2>现在是2019演员颁奖大会,演员{this.props.num}</h2>
+        <Button onClick={this.props.addGun}>添加演员</Button>
+        <Button onClick={this.props.removeGun}>演员</Button>
+        <Button onClick={this.props.addGunAsync}>添加</Button>
+        <Button onClick={this.props.removeGunAsync}>减少</Button>
       </div>
     )
   }
 }
-// 函数式组件 不需要this
-function Erying(props) {
 
-  return (
-    <div>
-      <h2>{props.name}</h2>
-    </div>
-  )
-
-
-
+// 高阶组件
+const mapStatetoProps=(state)=> {
+  return {num:state}
 }
-// 子组件 this.props.key 获取父组件的值 进行传递
-class Yiying extends React.Component {
-  constructor(props) {
-    super(props)
-    //  初始化状态
-    this.state = {
-      actors: ['李易峰', '吴亦凡', '鹿晗']
-    }
-    // 强制绑定this指向
-    // this.addActor = this.addActor.bind(this)
-  }
-  componentWillMount() {
-    console.log('组件马上加载初次渲染前')
-  }
-  componentDidMount() {
-    console.log('组件加载初完毕')
-  }
-  addActor=()=> {
-    console.log('你好，演员')
-    // this指向
-    this.setState({
-      actors: [...this.state.actors, '肖战' + Math.random()]
-    })
-  }
-  render() {
-    console.log('组件正在加载了')
-    return (
-      <div>
-        <h2>二级演员, 演员{this.props.name}</h2>
-        {/* 箭头函数的形式 */}
-        <Button type="primary" onClick={this.addActor}>演员爱豆</Button>
-        {/* 渲染state列表 */}
-        <List renderHeader={()=>'演员列表'}>
-          {/* 列表循环时 需要设置key */}
-          {this.state.actors.map(v => {
-            return <List.Item key={v}>{v}</List.Item>
-          })}
-        </List>
-
-      </div>
-    )
-  }
-}
+const actionCreators = {addGun,removeGun,addGunAsync,removeGunAsync}
+// 先执行装饰器模式
+App = connect(mapStatetoProps, actionCreators)(App)
 export default App;
