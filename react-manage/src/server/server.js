@@ -14,7 +14,7 @@ const User = mongoose.model('user', new mongoose.Schema({
 }))
 // 增加
 User.create({
-    user:'zly',
+    user:'赵丽颖',
     age:24
 },function(err, doc) {
     if (!err) {
@@ -43,8 +43,11 @@ app.get('/', function (req, res) {
 // 返回给前台
 app.get('/data', function (req, res) {
     // 查找
-    User.findOne({'user':'zly'}, function(err, doc){
-        //  res.json({name:'node express框架',type:'it'})
+    // User.findOne({'user':'zly'}, function(err, doc){
+    //     //  res.json({name:'node express框架',type:'it'})
+    //     return res.json(doc)
+    // })
+    User.findOne({'user':'杨幂'},function(err,doc){
         return res.json(doc)
     })
    

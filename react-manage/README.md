@@ -385,3 +385,325 @@ App = connet(mapStatetoProps,actionsCreators)(App)
 
 ### 装饰器 优化代码
 
+- yarn eject
+- yarn add babel-plugin-transform-decorators-legacy --save-dev
+- plugins
+
+
+<!-- const mapStatetoProps=(state)=>{
+    const num ={state}
+}
+const actionsCreators ={addGun,removeGun,addGunAsync,removeGunAsync}
+
+App = connet(mapStatetoProps,actionsCreators)(App) -->
+
+<!-- @connect(mapStatetoProps,actionsCreators) -->
+@connect(
+    <!-- 你要state什么属性放到props -->
+    state=>({num=state})
+    <!-- 你要什么方法放到props里 自动dispatch -->
+    {addGun,removeGun,addGunAsync,removeGunAsync}
+)
+
+
+### 进阶
+- 什么数据放到react里
+- Redux管理ajax
+- Redux管理聊天数据
+
+### React4
+
+开发单页应用
+
+安装
+
+yarn add react-router-dom --save
+
+ yarn add roadhog@2.5.0-beta.1
+  "plugins": [ ["@babel/plugin-proposal-decorators", { "legacy": true }]]
+
+入门组件
+
+- BrowserRouter 包裹整个应用
+- Router 路由对应渲染的组建 可嵌套
+- Link跳转
+- 动态路由 router 
+index.js
+import {BrowserRouter,Router,Route,Link} from 'react-router-dom';
+function Home() {
+    return <h2>home</h2>
+}
+(
+    <Provider store={store}>
+        <BrowserRouter>
+            <div>
+                <ul>
+                    <li>
+                        <Link to='/'>Frist</Link>
+                    <li>
+                      <li>
+                        <Link to='/home'>home</Link>
+                    <li>
+                      <li>
+                        <Link to='/pass'>pass</Link>
+                    <li>
+                </ul>
+                <Route path='/' exact component={App}></Route>
+                <Route path='/home' component={Home}></Route>
+                <Route path='/pass' component={pass}></Route>
+            </div>
+            <App/>
+        </BrowserRouter>
+    </Provider>
+)
+
+exact 精准匹配
+
+### React-router
+- url参数 router组件参数冒号标识参数
+- Redirect 组件跳转
+- Switch只渲染一个子组件
+
+历史跳转
+class Test extends React.Component {
+	constructor(props) {
+		super(props);
+	}
+	render() {
+		console.log(this.props);
+		return <h2>测试组件{this.props.match.params.location}</h2>
+	}
+}
+
+import {BrowserRouter,Router,Route,Redirect, Switch,Link} from 'react-router-dom';
+<Redirect to='/'></Redirect>最先显示的页面
+<Switch>所有的route</Switch>
+直接路由跳转
+
+	       <Switch>
+					{/* 只渲染第一个route */}
+					<Route path='/' exact component={App}></Route>
+					<Route path='/home' component={Home}></Route>
+					<Route path='/pass' component={Pass}></Route>
+					{/* 自动跳转 */}
+					<Redirect to='/home'></Redirect>
+					<Route path='/:location' component={Test}></Route>
+
+				</Switch>
+
+                	<ul>
+					<li>
+						<Link to='/'>Frist</Link>
+					</li>
+					<li>
+						<Link to='/home'>home</Link>
+					</li>
+					<li>
+						<Link to='/pass'>pass</Link>
+					</li>
+				</ul>
+
+
+
+构建登录跳转页面
+index.js
+<Switch>
+    <Route path='/login' component={Auth}></Route>
+    <Route path='/dashboard' component={Dashboard}></Route>
+    <Redirect to='/dashboard'></Redirect>
+</Swicth>
+建立Auth.js Dashboard.js Auth.redux.js
+
+Dashboard.js
+<ul>
+    <li>
+        <Link to='/dashboard/'>frist</Link>
+    </li>
+    <li>
+        <Link to='/dashboard/home'>home</Link>
+    </li>
+    <li>
+        <Link to='/dashboard/pass'>pass</Link>
+    </li>
+</ul>
+<Route path='/dashboard/' component={App}></Route>
+<Route path='/dashboard/home' component={Home}></Route>
+<Route path='/dashboard/pass' component={Pass}></Route>
+
+Auth.redux.js
+
+const LOGIN ='LOGIN'
+const LOGOUT ='LOGOUT'
+
+export function auth(state=(isAuth=true,user='杨幂'),action) {
+    switch(action.type) {
+        case LOGIN:
+            return {...state,isAuth=true}
+        case LOGOUT:
+            return {...state,isAuth=false}
+        default:
+            return state
+    }
+}
+
+export function login() {
+    return {type:LOGIN}
+}
+export function logout() {
+    return {type:LOGOUT}
+}
+
+
+### 和reduce配合
+
+- 多个reducer 合并reducer combineReducers合并
+index.js
+合并后
+import reducers from './reducer';
+
+const store = createStore(reducers,compose({
+    applyMiddleWare(thunk),
+    window.devToolsExtension:window.devToolsExtension()=>f=>{}
+}))
+
+reducer.js
+import {counter} from './index.redux';
+import {auth} from './Auth.redux';
+import {combinReduces} from 'redux';
+
+const reducers = combinReducers({counter,auth});
+export default reducers;
+
+### 登录校验
+
+Auth.js
+@connect(
+    state=>state.auth,
+    {login}
+)
+ <h1>你还没有登录</h1>
+ {this.props.isAuth ? <Redirect to='/dashboard' />:null}
+ <Button onClick={this.props.login}>登录</Button>
+
+dashboard.js
+
+@connect(
+    state=>state.auth,
+    {logout}
+)
+
+const match = this.props.match
+const redirectToLogin =<Redirect to='/login'></Redirect>
+const app=(
+    <div>
+        <h1>欢迎</h1>
+        {this.props.logout ? <Button onClick={this.props.logout}>注销</Button> : null}
+    </div>
+)
+return this.props.isAuth ? app:redirectToLogin
+
+
+
+### 招聘需求分析
+
+用户中心   牛人            boss
+
+登录   求职信息 个人信息  管理职位
+
+注册     职位列表         查看信息
+
+信息完善    聊天 socke.io
+
+### 项目骨架
+
+- src 前端源码目录
+- server express目录
+- component组件 container reducers 等 路由
+
+### 页面骨架
+
+- router划分页面
+- 用户信息 聊天
+
+- mongodb
+- axios异步请求
+- redux管理所有数据 antd-mobile 弱化css
+
+
+### 前后端联调
+
+yarn add axios --save
+
+## axios 如何发送异步请求
+- 如何发送 使用proxy配置转发
+- axios 拦截器 同意loading处理 最常用的
+- redux使用异步数据 渲染页面
+
+简洁好用的请求库
+
+所有的请求转发到1314端口
+"proxy":"http://localhost:1314"
+
+   axios.get('/data').then(res=>{
+            if (res.status ===200) {
+                dispatch(userData(res.data))
+               
+            }
+            console.log(res)
+        })
+
+Auth.redux.js
+const initState={
+    isAuth=true,
+    user:'杨幂',
+    age:26
+}
+export function auth(state={initState},action) {
+    switch(action.type) {
+        case LOGIN:
+            return {...state,isAuth:true}
+        case LOGOUT:
+            return {...state,isAuth:false}
+        case USER_DATA:
+            return {...state,user:action.payload.user,age:action.payload.age}
+    }
+}
+export function getUserData(){
+      axios.get('/data').then(res=>{
+            if (res.status ===200) {
+                dispatch(userData(res.data))
+               
+            }
+            console.log(res)
+        })
+
+}
+export function userData() {
+    return {type:USER_DATA,payload:data}
+}
+
+App.js
+
+import {login.getUserData}
+@connect(
+    {login,getUserData}
+)
+componentDidMount() {
+    this.props.getUserData()
+}
+{this.props.name} {thi.props.age}
+### 拦截器 拦截请求
+config.js
+import axios from 'axios';
+import {Toast} from 'antd-mobile';
+
+axios.interceptors.request.use(function(config){
+    Toast.loading('加载中',0)
+    return config
+})
+axios.interceptors.response.use(function(config) {
+    setTimeout(()=>{
+        Toast.hide()
+    },3000)
+    return config
+})
