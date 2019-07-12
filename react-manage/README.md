@@ -707,3 +707,126 @@ axios.interceptors.response.use(function(config) {
     },3000)
     return config
 })
+
+
+### 登录注册
+
+开发模式
+基于cookie用户验证
+- express 依赖cookie-parser 需要npm install cookie-parser --save 安装
+- cookie 类似于一张身份卡 登陆后 服务端返回 带着cookie就可以访问受限资源
+- 页cookie的管理浏览器会自动处理
+
+用户加载页面 ---带着cookie向后端获取用户信息------》用户加载页面/
+                            已登录             未登录
+
+       App内部页面            《         ---          登录成功前端存储cookie         ------------------------------ 登录页面
+
+登录注册页
+
+index.js
+
+检查路由
+
+import AuthRouter from './AuthRouter.jsx';
+import Login from '/login.jsx';
+import Register from './register.jsx';
+<BrowserRouter>
+    <div>
+        <AuthRouter></AuthRoute>
+        <Route path='/login' component={Login}></Route>
+         <Route path='/register' component={Register}></Route>
+    </div>
+</BrowserRouter>
+
+然后设计登录注册组件
+login.jsx
+引入logo
+引入其他组件
+Login 页跳转到 register页
+constructor(props){
+    super(props);
+        this.register=this.register.bind(this)
+   
+}
+
+register() {
+    console.log(this.props)
+    this.props.history.push('/register')
+}
+<Button onClick={this.register}>注册</Button>
+
+register.jsx
+一样同上
+import {} from 'antd-mobile';
+constructors(props) {
+    super(props);
+    this.state={
+        type:'boss'
+    }
+}
+
+
+前后端联调
+
+AuthRouter.jsx 判断登录
+import  {withRouter} from 'react-router-dom';
+@withRouter
+    componentDidMount() {
+        const publicList = ['/login','register']
+        const pathname = this.props.location.pathname
+        if(publicList.indexOf(pathname)> -1) {
+            return null
+        }
+        axios.get('/user/info').then(res=> {
+            if(res.status === 200) {
+                if(res.data.code ===0) {
+                    // 有登录信息
+                }else {
+                    console.log(this.props.history)
+                    this.props.history.push('/login')
+                }
+                console.log(res.data)
+            }
+        })
+    }
+
+server.js
+
+const express = require('express')
+// 引入库
+const userRouter = require('./user.js')
+// 开启中间件
+const app = express()
+app.use('/user',userRouter)
+
+
+// 发送
+// app.get('/', function (req, res) {
+//     res.send('<h1>Hello,World</h1>')
+// })
+app.listen(1314, function () {
+    console.log('Node app start at port')
+})
+
+user.js
+// 中间件
+const express = require('express')
+const Router = express.Router()
+// 路由对象进行挂载
+
+Router.get('/info',function(req,res) {
+    return res.json({code:1})
+})
+
+module.exports = Router
+
+model.js
+
+const mongoose = require('mongoose')
+// 连接mongo 并且使用myapp这个集合
+const DB_URL = 'mongodb://localhost:27017/myapp'
+mongoose.connect(DB_URL)
+mongoose.connection.on('connected',function() {
+    console.log('mongo connect success')
+})
