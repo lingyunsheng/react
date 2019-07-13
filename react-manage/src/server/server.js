@@ -1,8 +1,18 @@
 const express = require('express')
 // 引入库
-const userRouter = require('./user.js')
+const utils = require('utility')
+const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
+const userRouter = require('./user')
 // 开启中间件
+
+
 const app = express()
+
+app.use(cookieParser())
+// 解析cookie
+app.use(bodyParser.json())
+// 解析post的json
 app.use('/user',userRouter)
 
 

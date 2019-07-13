@@ -830,3 +830,230 @@ mongoose.connect(DB_URL)
 mongoose.connection.on('connected',function() {
     console.log('mongo connect success')
 })
+
+### 注册交互实现
+
+handleChange(key) {
+    this.setState({
+        [key]:value
+    })
+}
+<InputItem onChange={(v)=>{this.handleChange('user',v)}}>用户名</InputItem>
+<InputItem onChange={(v)=>{this.handleChange('pwd',v)}} type='password'>密码</InputItem>
+<InputItem onChange={(v)=>{this.handleChange('rpwd',v)}} type='password'>确认密码</InputItem>
+<RadioItem checked={this.state.type==='genius}
+onChange={()=>this.handleChange('type':'genius')}>个人<RadioItem>
+<RadioItem checked={this.state.type==='boss'}
+onChange={()=>this.handleChange('type':'boss')}>企业<RadioItem>
+
+
+this.handleRegister=this.handleRegister.bind(this)
+handleRegister() {
+    console.log(this.state)
+}
+<Button onClick={this.handleRegister}>注册</Button>
+
+### 注册发送
+redux
+
+定义user.redux.js
+
+
+const REGISTER_SUCCESS = 'REGISTER_SUCCESS'
+const ERROR_MSG = 'ERROR_MSG'
+
+const initState={
+    isAuth:false,
+    msg:'',
+    user:'',
+    pwd:'',
+    type:''
+}
+export function user(state={initState},action) {
+    switch(action.type) {
+        case REGISTER:
+            return {...state,msg,...action.payload,isAuth:true}
+        case ERROR_MSG:
+            return {...state,msg:action.msg,isAuth:false}
+        default:
+            return state
+    }
+}
+export function errorMsg() {
+    return {msg,type:'ERROR_MSG'}
+}
+<!-- 把data传入进去 -->
+export function register(user,pwd,type) {
+    if (!user||!pwd||!type) {
+        return erroMsg('用户名密码必须输入')
+    }
+    if(pwd!==rpwd) {
+        return erroMsg('密码不一致')
+    }
+    return dispatch=> {
+        axios.get('/user/register',{user,pwd,type}).then(res=>{
+            if (res.status ===2000 && res.data.code===0) {
+                dispatch(REGISTER_SUCCESS(user,pwd,type))
+            } else {
+                dispatch(ERROR_MSG(res.data.msg))
+            }
+        })
+    }
+}
+
+export function registerSuccess(data) {
+    return {type:REGISTER_SUCCESS,payload:data}
+}
+
+
+reducer.js
+import {user} from './redux/user.redus.js';
+import {combinReducers} from 'redux';
+
+const reducers = combinReducers({user})
+export reducers;
+
+register.jsx
+
+import {connect} from 'react-redux';
+import {register} from './redux/user'
+@connect(
+    state=>state.user,
+    {register}
+)
+register() {
+    this.props.register()
+}
+{this.props.msg ? <p>{this.props.msg}</p>: null}
+
+### 数据库模型的建立
+
+server.js 
+const express=require('express')
+const app =express()
+const userRouter = require('./user.js')
+app.use('/user',userRouter)
+
+app.listen(1314,function() {
+    console.log('port 1314)
+})
+
+user.js
+
+const express = require('express')
+const Router = express.Router()
+const model = require('./model')
+const User = model.getModel(name)
+
+Router.get('/list',function(req,res) {
+    User.find({},function(err,doc) {
+        return res.json(doc)
+    })
+})
+Router.get('/info', function(req.res) {
+    return res.json({code:1})
+})
+
+module.exports=Router
+
+Model.js
+
+const mongoose = require('mongoose')
+const DB_URL = 'mongodb:localhost:27017/myapp'
+mongoose.connect(DB_URL)
+<!-- 查询数据库是否连接 -->
+mongoose.connectin.on('connected',function() {
+    console.log('连接成功)
+})
+
+<!-- 定义模型 -->
+
+const models ={
+    user:{
+        'user':{type:String,require:true}
+    }
+}
+<!-- 可以加遍历 -->
+mongoose.model('user',Schema(models))
+for(let m in models) {
+    mongoose.model(m,Schema(models[m]))
+}
+
+<!-- 获取值 -->
+module.exports={
+    getModel:function(name){
+        return mongoose.model(name)
+    }
+}
+
+user.js
+Router.post('/register',function(req,res) {
+    // 接受传递的参数
+    console.log(req.body)
+    const {user,pwd,type} = req.body
+    // 查询用户名是否重复
+    User.findOne({user},function(err,doc) {
+        if (doc) {
+            return res.json({code:1,msg:'用户名已存在'})
+        }
+        if(err) {
+            return res.json({code:1,msg:'后端出错了'})
+        }
+        User.create({user,pwd:md5Pwd(pwd),type},function(err,doc) {
+            // 如果出错了
+            if(err) {
+                return res.json({code:1,msg:'后端出错了'})
+            }
+            return res.json({code:0})
+        })
+    })
+})
+
+然后user.redux.js
+redirectTo设计
+
+再添加util.js
+export function getRedirectPath(type,avatar) {
+    // 根据用户信息跳转
+    // user.type /boss/genius
+    // user.avatar /bossinfo/geniusinfo
+    let url = (type === 'boss') ? '/boss': '/genius'
+    if(!avatar) {
+        url += 'info'
+    }
+    return url
+}
+
+register.jsx引入
+<{this.props.redirecTo ? <Redirect to={this.props.redirecTo}/>} : null>
+<!-- 注册引入插件 -->
+ yarn add body-parser --save
+ server.js
+ 用户注册
+ const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
+
+app.use(cookieParser())
+// 解析cookie
+app.use(bodyParser.json())
+
+ 密码加密 MD5 非对称加密
+
+ 第三方库 utility
+ yarn add utility --save
+
+ server.js 引入 utils
+ const utils =require('utility)
+ user.js 也是
+
+ pwd:utils.md5(pwd)
+
+加密方法
+ function md5Pwd(){
+     const salt ='dguqhjeklf@321424'
+     return utils.md5(utils.md5(pwd+salt))
+ }
+
+ ### 登录实现
+
+后面一大串全没有听懂
