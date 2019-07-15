@@ -5,7 +5,8 @@ import {connect} from 'react-redux';
 import {loadData} from '../../redux/user.redux';
 @withRouter
 @connect (
-    state=>state,
+    // state=>state,
+    state=>state.user,
     {loadData}
 )
 class AuthRoute extends React.Component{
@@ -26,11 +27,11 @@ class AuthRoute extends React.Component{
                     // 有登录信息
                     this.props.loadData(res.data.data)
                 }else {
-                    console.log(this.props.history)
+                    // console.log(this.props.history)
                  
                     this.props.history.push('/login')
                 }
-                console.log(res.data)
+                // console.log(res.data)
             }
         })
     }

@@ -1057,3 +1057,61 @@ app.use(bodyParser.json())
  ### 登录实现
 
 后面一大串全没有听懂
+
+使用 PropTypes 进行类型检查
+自 React v15.5 起，React.PropTypes 已移入另一个包中。请使用 prop-types 库 代替。
+是否必传
+import PropTypes from 'prop-types';
+
+static proptypes = {
+selectAvatar:PropsType.func
+}
+
+export function update(data){
+	return dispatch=>{
+		axios.post('/user/update',data)
+			.then(res=>{
+				if (res.status===200&&res.data.code===0) {
+					dispatch(authSuccess(res.data.data))
+				}else{
+					dispatch(errorMsg(res.data.msg))
+				}
+			})
+	}
+}
+
+        <Button onClick={()=>this.props.update(this.state)} type='primary'>保存</Button>
+登录注册实现后
+
+index.js
+
+设置
+	<Route path='/bossinfo' component={BossInfo}></Route>
+	<Route path='/geniusinfo' component={GeniusInfo}></Route>
+<Route componnent={Dashboard}/>
+
+      const { pathname } = this.props.location
+        const user = this.props.user
+        const navList = [
+            {
+                path: '/boss',
+                text: '牛人',
+                icon: 'boss',
+                title: '牛人列表',
+                component: Boss,
+                // hide: user.type == 'genius'
+            },
+            {
+                path: '/genius',
+                text: 'boss',
+                icon: 'job',
+                title: 'BOSS列表',
+                component: Genius,
+                // hide: user.type == 'boss'
+            }
+        ]
+        return (
+            <div>
+
+                <NavBar mode="dark">{navList.find(v => v.path === pathname).title}</NavBar>
+                <NavLinkBar></NavLinkBar>

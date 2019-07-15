@@ -62,7 +62,7 @@ class Register extends React.Component {
                 <WhiteSpace></WhiteSpace>
                 <WhiteSpace></WhiteSpace>
                 <Button type='primary' onClick={this.handleRegister}>注册</Button>
-                <footer class="ft">
+                <footer className="ft">
                     <p className="text">注册即代表阅读并同意
                     <a href="#">服务条款</a></p>
                 </footer>

@@ -15,26 +15,34 @@ import 'antd-mobile/dist/antd-mobile.css';
 import AuthRoute from './components/AuthRoute/AuthRoute';
 import BossInfo from './components/BossInfo/BossInfo';
 import GeniusInfo from './components/GeniusInfo/GeniusInfo';
+import Dashboard from './components/Dashboard/Dashboard';
 
 const store = createStore(reducers, compose(
 	applyMiddleware(thunk),
 	window.devToolsExtension ? window.devToolsExtension() : f => { }
 ))
 console.log(store.getState())
-function Boss() {
-	return <h2>boss</h2>
-}
+// function Boss() {
+// 	return <h2>boss</h2>
+// }
+// function Dashboard() {
+// 	return <h2>Dashboard</h2>
+// }
 ReactDOM.render(
 	(<Provider store={store}>
 		<BrowserRouter>
 			<div>
 				{/* 检测路由是否ok */}
 				<AuthRoute></AuthRoute>
-				<Route path='/bossinfo' component={BossInfo}></Route>
-				<Route path='/geniusinfo' component={GeniusInfo}></Route>
-				<Route path='/boss' component={Boss}></Route>
-				<Route path='/login' component={Login}></Route>
-				<Route path='/register' component={Register}></Route>
+				<Switch>
+					<Route path='/bossinfo' component={BossInfo}></Route>
+					<Route path='/geniusinfo' component={GeniusInfo}></Route>
+					<Route path='/login' component={Login}></Route>
+					<Route path='/register' component={Register}></Route>
+					{/* 相同的部分 */}
+					<Route component={Dashboard}></Route>
+				</Switch>
+
 			</div>
 			<App />
 		</BrowserRouter>

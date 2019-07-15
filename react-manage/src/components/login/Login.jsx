@@ -6,7 +6,7 @@ import {Redirect} from 'react-router-dom';
 import {login} from '../../redux/user.redux';
 import '../register/register.styl';
 @connect(
-    state=>state,
+    state=>state.user,
     {login}
 )
 class Login extends React.Component{
@@ -36,7 +36,7 @@ class Login extends React.Component{
     render(){
         return(
             <div>
-                {this.props.redirectTo ? <Redirect to={this.props.redirectTo}/> :null}
+                  {this.props.redirectTo ? <Redirect to={this.props.redirectTo} /> : null}
                 <Logo/>
                 {/* <h2>登录页</h2> */}
                 <WingBlank>
