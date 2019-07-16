@@ -13,8 +13,10 @@ Router.get('/list',function(req,res) {
 
     //     }
     // })
-    User.find({},function(err,doc){
-        return res.json({code:0,doc,msg:'用户列表获取成功'})
+    // 获取用户列表type识别
+    const {type} = req.query
+    User.find({type},function(err,doc){
+        return res.json({code:0,data:doc,msg:'用户列表获取成功'})
     })
 })
 // 更新消息请求

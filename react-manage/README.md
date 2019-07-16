@@ -1081,7 +1081,7 @@ export function update(data){
 }
 
         <Button onClick={()=>this.props.update(this.state)} type='primary'>保存</Button>
-登录注册实现后
+### 登录注册实现后
 
 index.js
 
@@ -1112,6 +1112,199 @@ index.js
         ]
         return (
             <div>
+             <NavBar mode='dark' className='fixd-header'>{navList.find(v=>v.path===pathname).title}</NavBar>
+                {/* 吸顶 */}
+                <div style={{marginTop:45}}>
+                    <Switch>
+                        {navList.map(v=>(
+                               <Route key={v.path} path={v.path} component={v.component}></Route>
+                        ))}
+                    </Switch>
+                </div>
+                <NavLinkBar data={navList}></NavLinkBar>
 
-                <NavBar mode="dark">{navList.find(v => v.path === pathname).title}</NavBar>
-                <NavLinkBar></NavLinkBar>
+
+Boss.jsx
+
+import React from 'react';
+// 前后端联调
+import axios from 'axios';
+import { Card, WhiteSpace, WingBlank } from 'antd-mobile';
+class Boss extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            data:[]
+        }
+    }
+    componentDidMount() {
+        // 获取用户信息
+        axios.get('/user/list?type=genius').then(res => {
+            if (res.data.code === 0) {
+                // 渲染用户列表
+                this.setState({
+                    data: res.data.data
+                })
+            }
+        })
+    }
+    render() {
+        console.log(this.state)
+        // card.header
+        const Header = Card.Header
+        const Body = Card.Body
+        return (
+            <div>
+                <WhiteSpace></WhiteSpace>
+                <WingBlank>
+                    {/* 直接渲染card */}
+                    {this.state.data.map(v => (
+                        v.avatar ? (<Card key={v._id}>
+                            <Header title={v.user} thumb={require(`../img/${v.avatar}.png`)}
+                                extra={<span>{v.title}</span>}>
+
+                            </Header>
+                            <Body>
+                                {/* 信息换行 */}
+                                {v.desc.split('\n').map(v=>(
+                                    <div key={v}>{v}</div>
+                                ))}
+                            </Body>
+                        </Card>) : null
+                    ))}
+                </WingBlank>
+            </div>
+        )
+    }
+}
+export default Boss;
+
+user.js
+Router.get('/list',function(req,res) {
+    // User.remove({},(err,doc) =>{
+    //     if (!err) {
+
+    //     }
+    // })
+    // 获取用户列表type识别
+    const {type} = req.query
+    User.find({type},function(err,doc){
+        return res.json({code:0,data:doc,msg:'用户列表获取成功'})
+    })
+})
+
+### 俩喷嚏列表的渲染 redux管理
+建立 chatuser.redux.js
+import axios from 'axios';
+const USER_LIST = 'USER_LIST'
+
+const initState={
+    userlist:[]
+}
+export function chatuser(state=initState,action) {
+    switch(action.type) {
+        case USER_LIST:
+            return {...state,userlist:action.payload}
+        default:
+            return state
+    }
+}
+
+function userList(data) {
+    return {type:USER_LIST,payload:data}
+}
+
+export function getUserList(type) {
+    return dispatch=>{
+        axios.get('/user/list?type='+type).then(res=>{
+            if (res.data.code===0 ) {
+                 dispatch(userList(res.data.data))
+            }
+        })
+    }
+}
+
+reduce.js
+import {chatuser} from '../redux/chatuser.redux.js';
+ const reducers = combinReducers({user,chatuser});
+ export default reducers;
+
+ ### boss列表和组件优化
+
+ card
+
+ usercard 组件
+写一个usercard组件引入boss genius 即可
+
+ ### 个人中心
+ import React from 'react';
+import { connect } from 'react-redux';
+import { Result, List, WhiteSpace } from 'antd-mobile';
+@connect(
+    state => state.user
+)
+class User extends React.Component {
+
+    render() {
+        const props = this.props
+        const Item = List.Item
+        const Brief = Item.Brief
+        // console.log(this.props)
+        return props.user ? (
+            <div>
+                <Result
+                    // img={<img src={require(`../img/boy.png`)} alt=""/>}
+                    img={<img style={{ width: 50 }} src={require(`../img/${this.props.avatar}.png`)} alt="" />}
+                    title={this.props.user}
+                    message={this.props.type === 'boss' ? this.props.company : null}>
+                </Result>
+                <List renderHeader={() => '简介'}>
+                    <Item multipleLine>
+                        {props.title}
+                        {/* 变灰 */}
+                        {props.desc.split('\n').map(v => <Brief key={v}>{v}</Brief>)}
+                        {props.money ? <Brief>薪资:{props.money}</Brief>:null}
+
+                    </Item>
+                </List>
+                <WhiteSpace></WhiteSpace>
+                <List>
+                    <Item>
+                        退出登录
+                    </Item>
+                </List>
+            </div>
+        ) : null
+    }
+}
+export default User;
+
+### 清楚cookie cookie的各项
+看application
+document.cookie
+"userid=j%3A%225d2d7c9dcddd22a57894c9b7%22"
+
+yarn add browser-cookies --save
+
+给退出登录 绑定 onclick事件
+import browserCookie from 'browser-cookies'
+browserCookie.erase('userid')
+window.location.href= window.location.href
+onClick={this.logout}
+set get erase
+
+
+取消是
+import {Modal} rom 'antd-mobile
+const alert = Modal.alert
+
+        alert('注销', '确认退出吗???', [
+            { text: '取消', onPress: () => console.log('cancel') },
+            {
+                text: '确定', onPress: () => {
+                    browserCookie.erase('userid')
+                    // 也可以不手动刷新 注销时清空redux数据
+                    window.location.href = window.location.href
+                }
+            },
+        ])
