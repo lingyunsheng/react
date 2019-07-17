@@ -24,7 +24,13 @@ const models = {
         'money': { 'type': String }
     },
     chat: {
-
+        'chatid':{'type':String,require:true},
+        'from':{'type':String,require:true},
+        'to':{'type':String,require:true},
+        'read':{'type':Boolean,default:false},
+        'content':{'type':String,require:true,default:''},
+        // 用户排名 事件 顺序
+        'create_time':{'type':Number,default:new Date().getTime()}
     }
 }
 // 遍历模型注册号

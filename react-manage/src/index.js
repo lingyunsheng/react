@@ -16,7 +16,7 @@ import AuthRoute from './components/AuthRoute/AuthRoute';
 import BossInfo from './components/BossInfo/BossInfo';
 import GeniusInfo from './components/GeniusInfo/GeniusInfo';
 import Dashboard from './components/Dashboard/Dashboard';
-
+import  Chat from './components/Chat/Chat';
 const store = createStore(reducers, compose(
 	applyMiddleware(thunk),
 	window.devToolsExtension ? window.devToolsExtension() : f => { }
@@ -39,6 +39,7 @@ ReactDOM.render(
 					<Route path='/geniusinfo' component={GeniusInfo}></Route>
 					<Route path='/login' component={Login}></Route>
 					<Route path='/register' component={Register}></Route>
+					<Route path='/chat/:user' component={Chat}></Route>
 					{/* 相同的部分 */}
 					<Route component={Dashboard}></Route>
 				</Switch>

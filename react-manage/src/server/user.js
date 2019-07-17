@@ -5,6 +5,7 @@ const Router = express.Router()
 // 路由对象进行挂载
 const model = require('./model')
 const User = model.getModel('user')
+const Chat = model.getModel('chat')
 const _filter = {'pwd':0,'__v':0}
 // 用户列表
 Router.get('/list',function(req,res) {
@@ -17,6 +18,16 @@ Router.get('/list',function(req,res) {
     const {type} = req.query
     User.find({type},function(err,doc){
         return res.json({code:0,data:doc,msg:'用户列表获取成功'})
+    })
+})
+// 消息列表更新
+Router.get('/getmsgList',function(req,res) {
+    // 聊天内容 用户信息获取
+    const user = req.cookies.user
+    Chat.find({'$or':[{from:user},{to:user}]},function(err,doc) {
+        if(!err) {
+            return res.json({code:0,msgs:doc})
+        }
     })
 })
 // 更新消息请求

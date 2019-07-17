@@ -1308,3 +1308,422 @@ const alert = Modal.alert
                 }
             },
         ])
+
+### 清空redux数据
+alert('','',[
+    {}.
+    [text:'确定',onPress:()=>[
+        browserCookie.erase('userid')
+        this.props.logoutSubmit()
+    ]]
+])
+@connect(
+    {logoutSubmit}
+)
+<Redirect to={props.redirectTo}/>
+
+user.redux.js
+const LOGOUT = 'LOGOUT'
+case LOGOUT:
+        return {...initState,redirectTo='/login'}
+export function logoutSubmit() {
+    return {type:LOGOUT}
+}
+
+### 高阶组件优化
+hello()
+function WrapperHello(fn) {
+    return function(){
+            console.log('befor')
+    fn()
+    console.log('after')
+    }
+
+}
+hello=WrapperHello(hello)
+hello()
+
+class Hello extends React.Component{
+    render()  {
+        return (
+            <div>
+                <h2>i am mooc</h2>
+            </div>
+        )
+    }
+}
+
+组件就是一个函数 本质上 
+装饰组件的函数
+
+function WrapperHello(Comp) {
+    class WrapComp extends React.Component{
+        render() {
+            return (
+                <div>
+                    <p>这是HOC高阶组件特有的元素</p>
+                    <Comp {...this.props}></Comp>
+                </div>
+            )
+        }
+    }
+    return WrapComp
+}
+@WrapperHello
+class Hello extends React.Component{
+    render()  {
+        return (
+            <div>
+                <h2>i am mooc</h2>
+            </div>
+        )
+    }
+}
+
+属性代理 这儿
+反向继承 组件外面包一层
+
+WrapperHello
+定义一个函数 传进来一个组件 参数是一个组件
+返回另外一个组件 包裹着之前的组件
+
+反向继承
+
+    class WrapComp extends Comp {
+        componentDidMount() {
+            console.log('高阶组件新增的生命周期，加载完成')
+        }
+        render() {
+            return <Comp></Comp>
+        }
+    }
+属性代理
+   class WrapComp extends React.Component{
+        render() {
+            return (
+                <div>
+                    <p>这是HOC高阶组件特有的元素</p>
+                    <Comp {...this.props}></Comp>
+                </div>
+                // 属性代理 可以加属性
+            )
+        }
+    }
+
+代码复用 反向逻辑 
+
+### 高阶组件
+
+import React from 'react';
+export default function Form(Comp) {
+    return class WrapperComp extends React.Component{
+        constructor(props) {
+            super(props);
+            this.state={}
+            this.handleChange=this.handleChange.bind(this)
+        }
+        handleChange(key, val) {
+            console.log(key,val)
+            this.setState({
+                // 加中括号
+                [key]: val
+            })
+        }
+        render() {
+            return <Comp handleChange={this.handleChange} state={this.state} {...this.props}></Comp>
+        }
+    }
+}
+
+login.jsx
+   <InputItem onChange={v => this.props.handleChange('user', v)}>用户</InputItem>
+
+register.jsx
+import Form from '../Form/Form';
+
+@connect(
+    state => state.user,
+    { register }
+)
+@Form
+class Register extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleRegister = this.handleRegister.bind(this)
+    }
+    componentDidMount() {
+        this.props.handleChange('type','genius')
+    }
+    handleRegister() {
+        this.props.register(this.props.state)
+        console.log(this.props.state)
+    }
+  
+                    <InputItem onChange={v => this.props.handleChange('user', v)}>用户</InputItem>
+
+                    <InputItem onChange={v => this.props.handleChange('pwd', v)} type="password">密码</InputItem>
+
+                    <InputItem onChange={v => this.props.handleChange('rpwd', v)} type="password">确认密码</InputItem>
+
+                    <RadioItem checked={this.props.state.type === 'genius'}
+                        onChange={() => this.props.handleChange('type', 'genius')}>
+                        个人
+                    </RadioItem>
+
+                    <RadioItem checked={this.props.state.type === 'boss'}
+                        onChange={() => this.props.handleChange('type', 'boss')}>
+                        企业
+                    </RadioItem>
+                </List>
+                <WhiteSpace></WhiteSpace>
+                <WhiteSpace></WhiteSpace>
+                <Button type='primary' onClick={this.handleRegister}>注册</Button>
+### Socket.io
+聊天信息 实时显示 
+## Socket.io基础知识
+- Socket.io
+- Socket.io 和 ajax的区别
+- Socket.io前后端实战
+
+# Sockect.io
+基于事件的实时双向同辛苦
+- 基于websocket协议
+- 前后端通过事件进行双向通信
+- 配合express，快速开发实时应用
+# Socket.io和Ajax区别
+- 基于不同的网络协议
+- Scoket.io是实现websocket协议的一个库 基于websocket协议 双向通信协议 后端可以主动推送数据
+- Ajax异步刷新异步获取数据 基于http协议，单向，实时获取数据只能轮询一次次的查询 发起请求
+- 现代浏览器支持socket.io 不用担心兼容性问题
+
+# Socket通信模型
+
+### Socket.io后端API
+配合express
+- Io = require('socket.io')(http)
+- io.on监听事件
+- io.emit(触发事件)
+
+前端配合express
+- Import io from 'socket.io-client'
+- io.on 监听事件
+- io.emit 触发事件
+server端
+yarn add socket.io --save
+客户端
+yarn add socket.io-client --save
+
+index.js
+
+import Chat from './components/Chat/Chat'
+<Route path='/chat/:user' component={Chat}/>
+
+Chat.jsx
+
+renturn <h2> chat with user: {this.props.match.params.user}<h2>
+
+UserCard.jsx
+
+handleClick(v) {
+    this.props.history.push(`/chat/${v.user}`)
+}
+<Card key={v._id} onClick={()=>{this.handleClick}}>
+
+### 前后端联调
+server.js
+<!-- 引入io
+如果要和express配合 -->
+const io = require('socket.io')(server)
+const app = express()
+const server = require('http').Server(app)
+
+<!-- 监听前端登录成功 连接 -->
+io.on('connection',function(socket) {
+    console.log('user login')
+})
+
+server.listen(1314,function() {
+    console.log('port 1314')
+})
+
+Chat.jsx
+import io from 'socket.io-slient'
+componentDidMount(socket) {
+    <!-- 跨域请求 -->
+    const socket = io('ws:localhost:1314')
+}
+
+### 前端发送消息 后端后台显示
+
+componentDidMount() {
+
+}
+handleSubmit() {
+   socket.emit('sendmsg',{text:this.state.text})
+        console.log(this.state)
+        this.setState({text:''})
+}
+<div className=''>
+    <List>
+        <InputItem 
+        placeholder='请输入'
+        value={this.state.text}
+        onChange={v=>{this.setState({text:v})}
+        extra={s<span onClick={()=>handleSubmit()}>发送</span> }
+        </InputItem>
+    </List>
+</div>
+
+server.js
+
+<!--socke.on处理单词请求 -->
+socket.on('sendmsg',function(data) {
+    console.log(data)
+    io.emit('recv',data)
+})
+
+Chat.jsx
+
+componentDidMount() {
+    socket.on('recvmsg',(data)=>{
+        this.setState({
+            msg:[...this.state.msg,data.text]
+        })
+    })
+}
+{this.state.msg.map(v=>{
+    return <p key={v}>{v}</p>
+})}
+
+### Redux 管理数据
+modle.js
+    chat: {
+        'chatid':{'type':String,require:true},
+        'from':{'type':String,require:true},
+        'to':{'type':String,require:true},
+        'read':{'type':Boolean,default:false},
+        'content':{'type':String,require:true,default:''},
+        // 用户排名 事件 顺序
+        'create_time':{'type':Number,default:new Date().getTime()}
+    }
+
+
+聊天信息redux
+Chat.jsx
+import {connect} from 'react-redux';
+import {getmsgsList} from './redux/chat.redux';
+@connect(
+    state=>state,
+    {getmsgsList}
+)
+componentDidMount() {
+    this.props.getmsgList()
+}
+
+chat.redux.js
+
+import io from 'socket.ion-client'
+const server = io('ws:localhost:1314)
+const MSG_LIST ='MSG_LIST',
+const MSG_RECV = 'MSG_RECV'
+// 标识已读
+const MSG_READ = 'MSG_READ'
+
+const initState={
+    // 所有聊天信息
+    chatmsg:[],
+    // 未读信息
+    unread:0
+}
+export function chat(state=initState,action) {
+    switch(action.type) {
+        case MSG_LIST:
+            return {...state,chatmsg:action.payload,unread:action.payload.filter(v=>!v.read).length} //重点  unread:action.payload.filter(v=>!v.read).length
+        // case MSG_RECV:
+        // case MSG_READ:
+        default:
+            return state
+    }
+}
+
+function msgList(msgs) {
+    return {type:MSG_LIST,payload:msgs}
+}
+// redmsg
+export function getMsgList() {
+    return dispatch=>{
+        axios.get('/user/getmsgList').then(res=>{
+            if(res.status===200 && res.data.code===0) {
+                dispatch(msgList(res.data.msgs))
+            }
+        })
+    }
+}
+
+user.js
+
+Router.get('/user/getmsgList',function(req,res) {
+    const user = req.cookies.user
+        Chat.find({'$or':[{from:user,to:user}]},function(err,doc) {
+        if(!err) {
+            return res.json({code:0,msgs:doc})
+        }
+    })
+})
+
+### redux
+
+const express = require('express')
+
+const model = require('./model')
+const Chat = model.getModel('chat')
+// 引入库
+const utils = require('utility')
+const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
+
+const app = express()
+// 引入socket.io库
+// work with express  和express 配合 监听端口
+
+
+const server = require('http').Server(app)
+const io = require('socket.io')(server)
+// io.on io.emit
+io.on('connection', function(socket) {
+    console.log('user login')
+    // 当前这次请求 io全局
+    socket.on('sendmsg',function(data) {
+        // console.log(data)
+        // // 发送全局事件 每个人都在接受状态
+        // io.emit('recvmsg',data)
+        const { from ,to,msg} = data
+        const chatid = [from,to].sort().join('_')
+        Chat.create({chatid,from,to,content:msg},function(err,doc) {
+            io.emit('recvmsg',Object.assign({},doc._doc))
+        })
+    })
+  
+})
+
+
+const userRouter = require('./user')
+// 开启中间件
+
+
+
+
+app.use(cookieParser())
+// 解析cookie
+app.use(bodyParser.json())
+// 解析post的json
+app.use('/user',userRouter)
+
+
+// 发送
+// app.get('/', function (req, res) {
+//     res.send('<h1>Hello,World</h1>')
+// })
+server.listen(1314, function () {
+    console.log('Node app start at port')
+})
