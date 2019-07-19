@@ -7,6 +7,9 @@ const model = require('./model')
 const User = model.getModel('user')
 const Chat = model.getModel('chat')
 const _filter = {'pwd':0,'__v':0}
+Chat.remove({},function(err,doc) {
+
+})
 // 用户列表
 Router.get('/list',function(req,res) {
     // User.remove({},(err,doc) =>{
@@ -23,12 +26,20 @@ Router.get('/list',function(req,res) {
 // 消息列表更新
 Router.get('/getmsgList',function(req,res) {
     // 聊天内容 用户信息获取
-    const user = req.cookies.user
-    Chat.find({'$or':[{from:user},{to:user}]},function(err,doc) {
-        if(!err) {
-            return res.json({code:0,msgs:doc})
-        }
+    const user = req.cookies.userid
+    User.find({},function(e,userdoc){
+        // 用户拿出来
+        let users={}
+        userdoc.forEach(v=>{
+            users[v._id]={name:v.user,avatar:v.avatar}
+        })
+        Chat.find({'$or':[{from:user},{to:user}]},function(err,doc) {
+            if(!err) {
+                return res.json({code:0,msgs:doc,users:users})
+            }
+        })
     })
+
 })
 // 更新消息请求
 Router.post('/update',function(req,res) {

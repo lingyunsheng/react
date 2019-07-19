@@ -1727,3 +1727,30 @@ app.use('/user',userRouter)
 server.listen(1314, function () {
     console.log('Node app start at port')
 })
+
+### 聊天功能的实现下
+chat.jsx
+            <NavBar mode='dark'>
+                    {/* 用户列表 */}
+                    {this.props.match.params.user}
+                </NavBar>
+                {this.props.chat.chatmsg.map(v=>{
+                    return v.from===user ?(
+                        <List key={v._id}>
+                            <Item >{v.content}</Item>
+                        </List>
+                    ):(
+                        <List key={v._id} className='chat-me'>
+                            <Item>{v.content}</Item>
+                        </List>
+                    )
+                    // return <p key={v._id}>{v.content}</p>
+                })}
+user.js
+
+Chat.remove({},function(err,doc) {
+    
+})
+
+navbarLink.jsx
+    badge={v.path === '/msg' ? this.props.unread : 0}
