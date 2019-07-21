@@ -17,7 +17,7 @@ const initState = {
 export function chat(state=initState, action){
 	switch(action.type){
 		case MSG_LIST:
-			return {...state,users:action.payload.users, chatmsg:action.payload.msgs,unread:action.payload.msgs.filter(v=>!v.read&&v.to==action.payload.userid).length}
+			return {...state,users:action.payload.users, chatmsg:action.payload.msgs,unread:action.payload.msgs.filter(v=>!v.read&&v.to===action.payload.userid).length}
 		case MSG_RECV:
 			const n = action.payload.to===action.userid?1:0
 			return {...state,chatmsg:[...state.chatmsg,action.payload],unread:state.unread+n}
