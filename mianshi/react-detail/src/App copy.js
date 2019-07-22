@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 // 连接
 import {addGun,removeGun,addGunAsync,removeGunAsync} from './index.redux';
 import {Button} from 'antd-mobile';
-import '../node_modules/antd-mobile/dist/antd-mobile.css';
+import 'antd-mobile/dist/antd-mobile.css';
 
 // const mapStatetoProps=(state)=> {
 //   return {num:state}
