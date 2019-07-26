@@ -39,3 +39,32 @@ s instanceof String
 左边变量的原型链 .prototype = 右边的原型链 .__proto__
 
 右边变量的原型存在于左边变量的原型链上
+
+### object.create 原型 返回的 两个属性 一个是prototype
+function create(obj) {
+    return F() {}
+    let F.prototype = obj
+    return new F()
+}
+
+### new 的实现原理
+// new 的实现原理
+// 左边的原型 等于 右边的原型链
+function mynew(fun) {
+       // 创建一个新对象且将其隐式原型指向构造函数原型
+    return function() {
+        let obj ={
+            __proto__:fun.prototype
+        }
+        fun.call(obj,...arguments)
+        return obj
+    }
+}
+function Person(name,age) {
+    this.name = name
+    this.age=age
+}
+let obj1 = mynew(Person)('杨幂',18)
+console.log(obj1)
+### Promise 实现原理
+### 浅拷贝和深拷贝

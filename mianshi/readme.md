@@ -116,7 +116,74 @@ post请求不可以缓存
 9.GET只接受ASCII字符的参数的数据类型，而POST没有限制
 
 那么，post那么好为什么还用get？get效率高！
+### call apply bind
+this.call(arr,...arguments)
+Function.proptype.mycall = function(context) {
+    if (typeof this !== 'function') {
+        throw TypeError('not a Function')
+    }
+    <!-- 绑定this指向目标 -->
+    context=context || window
+    context.fn=this
+    let arg = [...arguments].slice(1)
+    let result = context.fn(...arg)
+    delete context.fn()
+    return result
 
+}
+<!-- 数组 -->
+Function.prototype.myapply = function(context) {
+      if (typeof this !== 'function') {
+        throw TypeError('not a Function')
+    }
+    context = context || window
+    context.fn = this
+    if (arguments[1]) {
+        return result=context.fn(...arguments[1])
+    } else {
+        retun result = context.fn()
+    }
+    delete context.fn()
+    return result
+}
+
+<!-- 函数 --> 手写bind
+Function.prototype.mybind = function(context) {
+       if (typeof this !== 'function') {
+        throw TypeError('not a Function')
+    }
+    <!-- 绑定this作用域 -->
+    let _this = this
+    let arg = [...arguments].slice(1)
+    return function F() {
+        if (this instanceof F) {
+            <!-- result = context.fn(...arg) -->
+         return   new _this =(...arg,...arguments)
+        } else {
+            return _this.apply(context,arg.concat(...arguments))
+        }
+    }
+}
+<!-- 手写instanceof原理 -->
+function instanceOf() {
+    let leftValue = left.__proto__
+    rightValue = right.prototype
+    while(true) {
+        if (leftValue === null) {
+            return false
+        }
+        if (leftValue === rightValue) {
+         return true
+        }
+           leftValue = leftValue.__proto__
+    }
+}
+
+### 原型链 原型
+函数的原型链对象 默认指向函数本身 原型对象除了原型属性 还有继承 原型链指针__proto__
+该指针始终指向上一层的原型对象
+Object.prototype.__prototype=null
+Object.__proto__ === Object.prototype true
 ### 数据结构与算法
 - 栈 一种先进后出的有序集合 新插入的元素放在栈顶 旧的元素在栈底 新元素靠近栈顶 旧元素靠近栈底
 - 队列 遵循先进先出的有序序列 新插入的元素放在队尾 
@@ -172,6 +239,110 @@ post请求不可以缓存
 - 优先队列 循环队列
 1. 实现一个优先队列，有两种选项：设置优先级，然后在正确的位置添加元素；或者用入列操作添加元素，然后按照优先级移除它们。
 2. 为充分利用向量空间，克服"假溢出"现象的方法是：将向量空间想象为一个首尾相接的圆环，并称这种向量为循环向量。存储在其中的队列称为循环队列（Circular Queue）。这种循环队列可以以单链表、队列的方式来在实际编程应用中来实现。
+
+# 两个栈 实现一个队列
+# 两个队列 实现一个栈
+
+### 链表
+链表存储有序的元素集合，但不同于数组，链表中的元素在内存中并不是连续放置的。每个 元素由一个存储元素本身的节点和一个指向下一个元素的引用(也称指针或链接)组成。
+数组可以查找任何元素
+链表 必须从开头元素根据节点指针慢慢迭代查找
+链表
+- 定义节点
+class Node {
+    constructor(element) {
+        <!-- 定义头节点 -->
+        <!-- 初始化 -->
+        this.head = element
+        this.next=null
+    }
+}
+class LinkedList {
+    constructor() {
+        this.head = null
+        this.length=0
+    }
+    append(element) {
+        const node = new Node(element)
+        let current = null
+        if (this.head === null) {
+            this.head = node
+        } else {
+            current = this.head
+            while(current.next) {
+                current=current.next
+            }
+            current.next=node
+        }
+        this.length++
+    }
+}
+const linkedList = new LinkedList()
+linkedList.append(1)
+linkedList.append(2)
+console.log(linkedList)
+# 双向链表
+双向链表和普通链表的区别在于，在链表中， 一个节点只有链向下一个节点的链接，而在双向链表中，链接是双向的:一个链向下一个元素， 另一个链向前一个元素，如下图所示:
+
+双向链表提供了两种迭代列表的方法:从头到尾，或者反过来。我们也可以访问一个特定节 点的下一个或前一个元素。在单向链表中，如果迭代列表时错过了要找的元素，就需要回到列表 起点，重新开始迭代。这是双向链表的一个优点。
+# 循环链表
+
+### 树
+树是一种非顺序数据结构，一种分层数据的抽象模型，它对于存储需要快速查找的数据非常有用。
+一个树结构 存在父子关系的节点 每个节点有一个或者零个父子节点和叶子节点
+
+节点
+- 根节点
+- 内部节点：有子节点
+- 外部节点： 没有子节点
+- 子树：大大小小节点组成的树
+- 深度：节点到根节点的数量
+- 高度：深度的最大值
+- 层级：节点层级来划分
+
+# 二叉树
+
+二叉树中的节点最多只能有两个子节点：一个是左侧子节点，另一个是右侧子节点。这些定 义有助于我们写出更高效的向/从树中插人、查找和删除节点的算法。二叉树在计算机科学中的 应用非常广泛。
+
+二叉搜索树（BST）是二叉树的一种，但是它只允许你在左侧节点存储（比父节点）小的值， 在右侧节点存储（比父节点）大（或者等于）的值。上图中就展现了一棵二叉搜索树。
+
+注：不同于之前的链表和集合，在树中节点被称为"键"，而不是"项"。
+
+二叉搜索树
+左节点小于父节点 右节点大于父节点
+class node {
+    constructor(key) {
+        this.key=key
+        this.left=null
+        this.right=null
+    }
+}
+class BinarySearchTree {
+    constructor() {
+        this.root=null
+    }
+    insert(key) {
+        const newNode = new Node(key)
+        const insertNode=(newNode,node)=>{
+            if(newNode.key<node.key) {
+                if(node.left===null) {
+                    node.left=newNode
+                } else {
+                    insertNode(node.left,newNode)
+                }
+            }
+        }
+    }
+}
+
+# 树的遍历
+遍历一棵树是指访问树的每个节点并对它们进行某种操作的过程。但是我们应该怎么去做呢？应该从树的顶端还是底端开始呢？从左开始还是从右开始呢？
+
+访问树的所有节点有三种方式：中序、先序、后序。
+### 图
+
+### 算法 排序算法
+### 动态规划 贪心算法
 
 
 
