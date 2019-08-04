@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <ul id="list"></ul>
+    <script>
+
+// 变量命名：节点类的变量，加上 nd 前缀，会更加容易辨识，当然，也有同学习惯借用 jquery 中的 $，关于变量命名的更多内容可以去阅读《可读代码的艺术》
+// 最小作用域 把变量放在自执行函数里 避免影响重复命名 不产生全局变量
+        (()=>{
+            const ndcontainer = document.getElementById('list');
+            if(!ndcontainer) {
+                    return
+            }
+            for(let i=0; i<300; i++) {
+                nditem = document.createElement('li');
+                nditem.innerText = i+1;
+                // nditem.addEventListener('click', function() {
+                //     // addEventListenner this指向当前结点 而 箭头函数会强制改变上下文this的指向
+                //     alert(this.innerText)
+                // })
+                ndcontainer.appendChild(nditem)
+
+            }
+            // 事件委托
+            // 使用事件委托能有效的减少事件注册的数量，并且在子节点动态增减是无需修改代码，使用事件委托的代码如下：
+            ndcontainer.addEventListener('click',(e)=>{
+                const target = e.target
+                if(target.tagName==='LI') {
+                    alert(target.innerText)
+                }
+            })
+        })()
+    </script>
+</body>
+</html>
