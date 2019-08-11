@@ -1072,4 +1072,76 @@ console.log(binarySearch([3,4,1,2],2))
 # 递归实现
 
 
+### 头条
+1. css的盒模型
+- 标准盒模型 contentbox 左右border+左右padding+contentwidth  就是内容盒子
+所设宽度=内容宽度
+    - content-box 默认值 设置元素宽占100px 内容区会有100px的宽度 任何边框和内边距的宽度都会增加到最后绘制出来的元素宽度中
+- ie盒模型 borderbox width=content+padding+border 任何内边距和边框都在设定的宽度和高度内绘制
+当已经设置了width height那就是内容的宽度 border和padding不包含在里面
+box-sizing 可以设置用那种盒模型
+box-sizing:content-box || border-box
+所设宽度=内容宽度+内边距+边框
+设置的边框和内边距时包含在width和height中，内容的实际宽度就是width-（border+padding)
+全局设置boder-box   
+- box-sizing:content-box;在宽度和高度之外绘制元素的内边距和边框。
+box-sizing:border-box;通过从已设定的宽度和高度分别减去边框和内边距才能得到内容的宽度和高度.
+html {
+    box-sizing:border-box;
+}
+*，*：：before,*::after {
+    box-sizing:inherit 
+}
+选择器*无法覆盖到伪元素  :befor, :after 分别设置
+box-sizing： inherit 使元素尊重其父元素box-sizing规则
+2. css选择器分类 css优先级
+- css选择器
+  - id选择器 id="a"
+  - 类选择器 class="b c"
+  - 标签选择器 body{} div.b.c{} ul{} li{}
+  - 全局选择器 *{}
+  复杂:
+  - 组合选择器 组合选择器 .head .head_logo 每个盒子的类名
+  - 后代选择器  #head .nav ul li 从父元素到子孙集
+  - 群组选择器  div, span, img {} 具有一样的标签
+  - 继承选择器 继承父类
+  - 伪类选择器 a标签 a:hover{} 
+  - 子选择器 div>p 
+  - css相邻兄弟选择器 h1+p
+！important>行内样式>id选择器>类选择器>标签选择器>通配符*>继承>浏览器默认属性
+      div {
+            width:100px;
+            height:100px;
+        }
+        #a {
+            color:red;
+        }
+        div.b.c {
+            color:green !important;
+            
+        }
+    </style>
+    <div id="a" class="b c">我</div>
+3. 居中的几种方式 口述
+4. flex弹性布局 flex的属性
+5. 块元素和行内元素
+6. BFC
+7. es6 的promise 原理 具体
+8. es6的属性 了解哪些
+9. this
+
+
+
+### 下午自测： 表达
+
+
+### 找出数组出现最多的元素 并标记下标 次数
+### 数组去重 输出一个新的数组
+
+### 二维数组的查找
+### 替换空格
+return str.replace(/\s/g,'%20')
+
+
+
 
