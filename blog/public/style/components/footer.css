@@ -1,0 +1,12 @@
+.footer-div {
+    background:#303133;
+    /* padding:4rem; */
+    overflow:hidden;
+    /* height:2.8rem; */
+    border-top:1px solid #ccc;
+    color:#fff;
+    text-align: center;
+    /* position: fixed; */
+    /* bottom: 0; */
+    width: 100%;
+}

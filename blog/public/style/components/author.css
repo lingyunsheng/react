@@ -1,0 +1,17 @@
+.author-div {
+    text-align: center;
+
+}
+.author-avatar {
+    padding: 16px;
+}
+
+.avatar-introduction {
+    padding: 16px;
+}
+
+.content {
+    color:#0066FF;
+    margin-right: 8px !important;
+    /* padding-left: 8px; */
+}

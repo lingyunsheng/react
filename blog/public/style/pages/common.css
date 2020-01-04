@@ -1,0 +1,26 @@
+
+html {
+  font-size: 62.5%;
+}
+body {
+    background:#f6f6f6 !important;
+    width: 100%;
+    height: 100%;
+}
+.common-left{
+  background-color: #FFF !important;
+  padding:1px;
+  border-radius: 1px;
+  border-bottom:1px solid #eee;
+}
+.common-right{
+  background-color: #FFF !important;
+  margin-left: 10px;
+  padding:1px;
+  border-radius: 1px;
+   border-bottom:1px solid #eee;
+
+}
+.common-main{
+  margin-top: 10px;
+}

@@ -1,0 +1,39 @@
+.header {
+    background:#303133;
+    /* padding:4rem; */
+    overflow:hidden;
+    /* height:2.8rem; */
+    border-bottom:1px solid #ccc;
+}
+
+.header-logo {
+    color:#fff;
+    font-size:24px;
+    text-align:left;
+}
+
+.header-title {
+    display:inline-block;
+    color:#fff;
+    font-size:12px;
+    padding-left:10px;
+}
+
+.ant-menu {
+    line-height:50px;
+}
+.ant-menu-item {
+    font-size:14px !important;
+}
+
+.ant-menu-horizontal > .ant-menu-item-selected{
+    color:#fff !important;
+    border-bottom: 2px solid #fff !important;
+}
+
+.ant-menu-horizontal > .ant-menu-item:hover {
+    color:#fff !important;
+    border-bottom: 2px solid transparent !important;
+    font-weight: blod !important;
+    transform: scale(1.2)
+}
