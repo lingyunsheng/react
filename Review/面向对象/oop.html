@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>面向对象</title>
+</head>
+<body>
+    <script>
+    //类的声明
+    // 传统的构造函数
+    // ES6的class
+    function Animal() {
+        this.name = 'name'
+    }
+    class Animal2 {
+        constructor() {
+            this.name = name
+        }
+    }
+    //简写实例化
+    console.log(new Animal(),new Animal2());
+    // 类的继承 借助构造函数 
+    //构造函数继承  父类函数有自己的原型链 无法继承父类原型链上的方法
+    function Parent1() {
+        this.name='parent1'
+    }
+    Parent1.prototype.say=function() {
+
+    }
+    function Child1() {
+        Parent1.call(this) //apply 改变函数上下文this指向
+        this.type='child1'
+    }
+    console.log(new Child1())
+    // 原型链继承 无法实现多继承
+    function Parent2() {
+        this.name = 'parent2'
+        this.play=[1,2,3]
+    }
+    function Child2() {
+        this.type='child2'
+    }
+    // 任何函数都有prototype属性 让构造函数的实例能访问到原型对象上
+    Child2.prototype = new Parent2()
+    Child2.prototype.name = 'YM'
+    console.log(new Child2())
+    let s1 = new Child2()
+    let s2 = new Child2()
+    console.log(s1.play, s2.play)
+    s1.play.push(4)
+
+    // 组合继承 构造继承+原型继承组合体
+    function Parent3() {
+        this.name = 'parent3'
+        this.play = [1,2,3]
+    }
+    function Child3() {
+        Parent3.call(this)
+        this.type = 'child3'
+    }
+    Child3.prototype = new Parent3()
+    let s3 = new Child3()
+    let s4 = new Child3()
+    s3.play.push(4)
+    console.log(s3.play,s4.play)
+    // 组合继承的优化方式
+    function Parent4() {
+        this.name = 'parent4'
+        this.play = [1,2,3]
+    }
+    function Child4() {
+        Parent4.call(this)
+        this.type = 'child4'
+    }
+    Child4.prototype = Parent4.prototype
+    let s5 = new Child4()
+    let s6 = new Child4()
+    s5.play.push(4)
+    console.log(s5,s6)
+    console.log(s5 instanceof Child4, s5 instanceof Parent4)
+    console.log(s5.constructor)
+
+    function Parent5() {
+        this.name = 'parent5'
+        this.play = [1,2,3]
+    }
+    function Child5() {
+        Parent5.call(this)
+        this.type = 'child5'
+    }
+    //中间对象 child5的原型对象时付剋的原型
+    Child5.prototype = Object.create(Parent5.prototype) //.__proto__
+    Child5.prototype.constructor = Child5
+    let s7 = new Child5()
+    console.log(s7 instanceof Child5, s7 instanceof Parent5)
+    console.log(s7.constructor)
+
+    </script>
+</body>
+</html>

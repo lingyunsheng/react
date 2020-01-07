@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>原型链</title>
+</head>
+
+<body>
+    <script>
+        let o1 = { name: 'o1' }
+        let o2 = new Object({ name: 'o2' });
+        let M = function (name) { this.name = name };
+        let o3 = new M('o3');
+        let P = { name: 'P' };
+        let o4 = Object.create(P);
+        M.prototype.say=function() {
+            console.log('say hi');
+        }
+        let o5 = new M('o5');
+
+        let new2 = function(func) {
+            // 创建一个对象 空对象关联构造函数的原型链原型
+            let o = Object.create(func.prototype);
+            // 转移上下文 this指向
+            let k = func.call(o);
+            if(typeof k === 'object') {
+                return k;
+            } else {
+                return o;
+            }
+        }
+        let o6 = new2(M)
+        console.log(o6)
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>边距重叠问题</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #sec {
+            background: #f00;
+            overflow: hidden;
+        }
+
+        .child {
+            height: 100px;
+            margin-top: 10px;
+            background: yellow;
+        }
+
+        #margin {
+            background: pink;
+            overflow: hidden;
+        }
+
+        #margin>p {
+            margin: 5px auto 25px;
+            background: red;
+        }
+
+        #layout {
+            background: red;
+            margin-top: 20px;
+        }
+
+        #layout .left {
+            float: left;
+            width: 100px;
+            height: 100px;
+            background: pink;
+        }
+
+        /* BFC 不与float重叠 */
+        #layout .right {
+            height: 110px;
+            background: #666;
+            overflow: auto;
+        }
+
+        /* BFC子元素即使是float也会参与计算 */
+        #float {
+            background: red;
+            margin-top: 20px;
+            overflow: auto;
+        }
+
+        .float {
+            background: blue;
+            float: left;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 父子元素边距重叠 -->
+    <!-- 兄弟元素边距重叠 取最大值 -->
+    <!-- 空元素边距重叠 -->
+    <section id="sec">
+        <article class="child"></article>
+    </section>
+    <!-- 垂直方向边距重叠问题 -->
+    <section id="margin">
+        <p>1</p>
+        <div class="2" style="overflow:hidden;">
+            <p>2</p>
+        </div>
+        <p>3</p>
+    </section>
+    <!-- 两栏布局  BFC 与float元素重叠 -->
+    <section id="layout">
+        <div class="left"></div>
+        <div class="right"></div>
+    </section>
+    <section id="float">
+        <div class="float">浮动元素</div>
+    </section>
+</body>
+
+</html>

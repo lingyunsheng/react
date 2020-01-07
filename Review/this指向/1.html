@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>this的指向</title>
+</head>
+<body>
+    <script>
+        let a=1
+        //此时this指向是全局window a未定义
+        console.log(this.a);
+        function Person(name) {
+            this.name=name
+        }
+        let person = new Person('zzh')
+        console.log(person.name);
+        console.log(this.Person);
+        function Super(age) {
+            this.age=age;
+            let obj ={a:'2'};
+            return obj;
+        }
+        let s = new Super('21');
+        console.log(s.age);
+        console.log(this.Super);
+    </script>
+</body>
+</html>
